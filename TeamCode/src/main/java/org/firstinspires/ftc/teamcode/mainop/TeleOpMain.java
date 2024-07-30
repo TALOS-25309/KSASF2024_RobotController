@@ -34,7 +34,7 @@ public class TeleOpMain {
             // 왼쪽 회전
             wheelPart.move(WheelPart.Direction.ROTATE_L);
         }
-        else if(gamepad.y){
+        else if(gamepad.b){
             // 오른쪽 회전
             wheelPart.move(WheelPart.Direction.ROTATE_R);
         }
