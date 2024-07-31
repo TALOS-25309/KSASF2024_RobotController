@@ -1,10 +1,19 @@
 package org.firstinspires.ftc.teamcode.part;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 public class WheelPart {
     private DcMotor motorFL, motorFR, motorBL, motorBR;
+
+    public WheelPart(HardwareMap hardwareMap){
+        motorFL = hardwareMap.get(DcMotor.class, "FrontLeft");
+        motorFR = hardwareMap.get(DcMotor.class, "FrontRight");
+        motorBL = hardwareMap.get(DcMotor.class, "BackLeft");
+        motorBR = hardwareMap.get(DcMotor.class, "BackRight");
+
+    }
 
     private double wheelSpeed = 0.5;
 
@@ -40,34 +49,9 @@ public class WheelPart {
     public void move(Direction direction) {
         motorFL.setPower(wheelSpeed * direction.label()[0]);
         motorFR.setPower(wheelSpeed * direction.label()[1]);
-        motorBL.setPower(wheelSpeed * direction.label()[2]);
+        motorBL.setPower(wheelSpeed * -direction.label()[2]);
         motorBR.setPower(wheelSpeed * direction.label()[3]);
     }
-
-//    public void moveForward(){
-//        move(Direction.MOVE_FW);
-//    }
-//
-//    public void moveBackward(){
-//        motorFL.setPower(wheelSpeed * -1);
-//        motorFR.setPower(wheelSpeed * -1);
-//        motorBL.setPower(wheelSpeed * -1);
-//        motorBR.setPower(wheelSpeed * -1);
-//    }
-//
-//    public void moveLeft(){
-//        motorFL.setPower(wheelSpeed * -1);
-//        motorFR.setPower(wheelSpeed * 1);
-//        motorBL.setPower(wheelSpeed * 1);
-//        motorBR.setPower(wheelSpeed * -1);
-//    }
-//
-//    public void moveRight(){
-//        motorFL.setPower(wheelSpeed * 1);
-//        motorFR.setPower(wheelSpeed * -1);
-//        motorBL.setPower(wheelSpeed * -1);
-//        motorBR.setPower(wheelSpeed * 1);
-//    }
 
 
 }
