@@ -15,7 +15,7 @@ public class WheelPart {
 
     }
 
-    private double wheelSpeed = 0.5;
+    private double wheelSpeed = 0.7;
 
     public void stop(){
         motorFL.setPower(0);

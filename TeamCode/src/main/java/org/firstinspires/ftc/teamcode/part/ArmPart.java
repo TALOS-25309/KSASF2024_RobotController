@@ -20,7 +20,7 @@ public class ArmPart {
         private boolean opened = false;
 
         public void open(){
-            servoHand.setPosition(0.5);
+            servoHand.setPosition(0.6);
             this.opened = true;
         }
 
@@ -37,18 +37,16 @@ public class ArmPart {
 
         public void init(){
             lower();
-//            servoArm.scaleRange();
-
         }
 
 
         public void raise(){
-            servoArm.setPosition(1);
+            servoArm.setPosition(0.1);
             this.raised = true;
         }
 
         public void lower(){
-            servoArm.setPosition(0.1);
+            servoArm.setPosition(0.6);
             this.raised = false;
         }
     }
@@ -58,9 +56,6 @@ public class ArmPart {
 
 
     public void move_hand(){
-
-
-
         if(hand.opened){
             hand.close();
         }

@@ -64,7 +64,7 @@ public class TeleOpMain extends OpMode{
 
         // 집게손 움직임
 
-        if(gamepad2.left_bumper){
+        if(gamepad1.left_bumper){
             // 닫힘 <--> 열림
             if(!last_left_bumper){
                 this.armPart.move_hand();
@@ -77,7 +77,7 @@ public class TeleOpMain extends OpMode{
 
 
         // 손목 움직임
-        if(gamepad2.right_bumper) {
+        if(gamepad1.right_bumper) {
             if(!last_right_bumper){
                 this.armPart.move_arm();
             }
@@ -88,11 +88,18 @@ public class TeleOpMain extends OpMode{
         }
 
         // 수평 리니어 움직임
-        if(gamepad2.triangle){
+        if(gamepad1.triangle){
             this.linearPart.set_pos(LinearPart.Direction.FW);
         }
-        else if(gamepad2.cross){
+        else if(gamepad1.cross){
             this.linearPart.set_pos(LinearPart.Direction.BW);
+        }
+
+        if(gamepad1.right_stick_y > 0){
+            this.linearPart.move(LinearPart.Direction.FW);
+        }
+        else if(gamepad1.right_stick_y < 0){
+            this.linearPart.move(LinearPart.Direction.BW);
         }
 
 
