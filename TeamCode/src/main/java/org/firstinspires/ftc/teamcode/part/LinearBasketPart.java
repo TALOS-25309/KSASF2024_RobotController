@@ -5,20 +5,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LinearBasketPart {
-    private DcMotor dcLinear;
-    private boolean expanded = false;
+    public DcMotor dcLinear;
+    public boolean to_expand = false;
 
     public LinearBasketPart(HardwareMap hardwareMap){
         dcLinear = hardwareMap.get(DcMotor.class, "dcLinear");
         dcLinear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         dcLinear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        dcLinear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
 
     public enum Direction {
-        UP(-1),
-        DOWN(1),
-        STOP(0)
+        UP(-1400),
+        DOWN(-100),
         ;
 
         private final int label;
@@ -30,9 +31,24 @@ public class LinearBasketPart {
         }
     }
 
-    // private
-    private double power = 1;
-    public void move(Direction direction){
-        dcLinear.setPower(direction.label());
+    public void move(){
+
+        if(this.to_expand){
+            if(this.dcLinear.getCurrentPosition() > Direction.UP.label()){
+                this.dcLinear.setPower(-0.5);
+            }
+            else{
+                this.dcLinear.setPower(0);
+            }
+        }
+
+        else{
+            if(this.dcLinear.getCurrentPosition() < Direction.DOWN.label()){
+                this.dcLinear.setPower(0.5);
+            }
+            else{
+                this.dcLinear.setPower(0);
+            }
+        }
     }
 }

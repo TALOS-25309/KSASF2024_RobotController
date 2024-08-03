@@ -25,7 +25,7 @@ public class ArmPart {
         }
 
         public void close(){
-            servoHand.setPosition(0);
+            servoHand.setPosition(0.1);
             this.opened = false;
         }
 

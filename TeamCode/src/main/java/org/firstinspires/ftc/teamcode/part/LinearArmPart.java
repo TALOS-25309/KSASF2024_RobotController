@@ -12,6 +12,7 @@ public class LinearArmPart {
         servoLinearR = hardwareMap.get(Servo.class, "LinearR");
         servoLinearL.setDirection(Servo.Direction.FORWARD);
         servoLinearR.setDirection(Servo.Direction.REVERSE);
+
     }
 
     public enum Direction {

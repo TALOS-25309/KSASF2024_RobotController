@@ -28,6 +28,8 @@ public class TeleOpMain extends OpMode{
 
     boolean last_left_bumper = false;
     boolean last_right_bumper = false;
+    boolean last_circle = false;
+    boolean last_triangle = false;
 
     public void start(){
 
@@ -91,33 +93,47 @@ public class TeleOpMain extends OpMode{
         }
 
         // 수평 리니어 움직임 - 불연속적
-        if(gamepad1.triangle){
-            if(this.linearArmPart.expanded){
-                this.linearArmPart.set_pos(LinearArmPart.Direction.FW);
-            }else{
-                this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
+        if(gamepad1.triangle) {
+            if(!last_triangle){
+                if(this.linearArmPart.expanded){
+                    this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
+                }else{
+                    this.linearArmPart.set_pos(LinearArmPart.Direction.FW);
+                }
             }
+            last_triangle = true;
+        }
+        else{
+            last_triangle = false;
         }
 
+
         // 수평 리니어 움직임 - 연속적
-        if(gamepad1.right_stick_y > 0){
-            this.linearArmPart.move(LinearArmPart.Direction.FW);
-        }
-        else if(gamepad1.right_stick_y < 0){
-            this.linearArmPart.move(LinearArmPart.Direction.BW);
-        }
+        // if(gamepad1.right_stick_y > 0){
+        //     this.linearArmPart.move(LinearArmPart.Direction.FW);
+        // }
+        // else if(gamepad1.right_stick_y < 0){
+        //     this.linearArmPart.move(LinearArmPart.Direction.BW);
+        // }
+
+
 
 
         // 수직 리니어 움직임
-        if(gamepad1.circle){
-            this.linearBasketPart.move(LinearBasketPart.Direction.UP);
-        }
-        else if(gamepad1.square){
-            this.linearBasketPart.move(LinearBasketPart.Direction.DOWN);
+        if(gamepad1.circle) {
+            if(!last_circle){
+                this.linearBasketPart.to_expand = !this.linearBasketPart.to_expand;
+            }
+            last_circle = true;
         }
         else{
-            this.linearBasketPart.move(LinearBasketPart.Direction.STOP);
+            last_circle = false;
         }
+
+        this.linearBasketPart.move();
+
+        telemetry.addData("Current Pos", this.linearBasketPart.dcLinear.getCurrentPosition());
+        telemetry.addLine();
 
     }
 
