@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 import org.firstinspires.ftc.teamcode.part.ArmPart;
-import org.firstinspires.ftc.teamcode.part.LinearPart;
+import org.firstinspires.ftc.teamcode.part.LinearArmPart;
+import org.firstinspires.ftc.teamcode.part.LinearBasketPart;
 import org.firstinspires.ftc.teamcode.part.WheelPart;
 
 @TeleOp(name = "KSASF", group = "")
@@ -14,13 +15,15 @@ public class TeleOpMain extends OpMode{
 
     private WheelPart wheelPart;
     private ArmPart armPart;
-    private LinearPart linearPart;
+    private LinearArmPart linearArmPart;
+    private LinearBasketPart linearBasketPart;
 
 
     public void init(){
         this.armPart = new ArmPart(hardwareMap);
         this.wheelPart = new WheelPart(hardwareMap);
-        this.linearPart = new LinearPart(hardwareMap);
+        this.linearArmPart = new LinearArmPart(hardwareMap);
+        this.linearBasketPart = new LinearBasketPart(hardwareMap);
     }
 
     boolean last_left_bumper = false;
@@ -87,21 +90,34 @@ public class TeleOpMain extends OpMode{
             last_right_bumper=false;
         }
 
-        // 수평 리니어 움직임
+        // 수평 리니어 움직임 - 불연속적
         if(gamepad1.triangle){
-            this.linearPart.set_pos(LinearPart.Direction.FW);
-        }
-        else if(gamepad1.cross){
-            this.linearPart.set_pos(LinearPart.Direction.BW);
+            if(this.linearArmPart.expanded){
+                this.linearArmPart.set_pos(LinearArmPart.Direction.FW);
+            }else{
+                this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
+            }
         }
 
+        // 수평 리니어 움직임 - 연속적
         if(gamepad1.right_stick_y > 0){
-            this.linearPart.move(LinearPart.Direction.FW);
+            this.linearArmPart.move(LinearArmPart.Direction.FW);
         }
         else if(gamepad1.right_stick_y < 0){
-            this.linearPart.move(LinearPart.Direction.BW);
+            this.linearArmPart.move(LinearArmPart.Direction.BW);
         }
 
+
+        // 수직 리니어 움직임
+        if(gamepad1.circle){
+            this.linearBasketPart.move(LinearBasketPart.Direction.UP);
+        }
+        else if(gamepad1.square){
+            this.linearBasketPart.move(LinearBasketPart.Direction.DOWN);
+        }
+        else{
+            this.linearBasketPart.move(LinearBasketPart.Direction.STOP);
+        }
 
     }
 

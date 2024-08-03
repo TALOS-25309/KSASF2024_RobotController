@@ -3,10 +3,11 @@ package org.firstinspires.ftc.teamcode.part;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class LinearPart {
+public class LinearArmPart {
     private Servo servoLinearL, servoLinearR;
+    public boolean expanded = true;
 
-    public LinearPart(HardwareMap hardwareMap){
+    public LinearArmPart(HardwareMap hardwareMap){
         servoLinearL = hardwareMap.get(Servo.class, "LinearL");
         servoLinearR = hardwareMap.get(Servo.class, "LinearR");
         servoLinearL.setDirection(Servo.Direction.FORWARD);
@@ -33,9 +34,11 @@ public class LinearPart {
     public void set_pos(Direction direction){
         if(direction == Direction.FW){
             this.final_pos=0.2;
+            this.expanded = true;
         }
         else{
             this.final_pos=0.1;
+            this.expanded = false;
         }
         this.servoLinearL.setPosition(final_pos+0.275);
         this.servoLinearR.setPosition(final_pos);
