@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.part.ArmPart;
 import org.firstinspires.ftc.teamcode.part.LinearArmPart;
 import org.firstinspires.ftc.teamcode.part.LinearBasketPart;
 import org.firstinspires.ftc.teamcode.part.WheelPart;
+import org.firstinspires.ftc.teamcode.part.BasketPart;
 
 @TeleOp(name = "KSASF", group = "")
 public class TeleOpMain extends OpMode{
@@ -17,6 +18,7 @@ public class TeleOpMain extends OpMode{
     private ArmPart armPart;
     private LinearArmPart linearArmPart;
     private LinearBasketPart linearBasketPart;
+    private BasketPart basketPart;
 
 
     public void init(){
@@ -24,12 +26,13 @@ public class TeleOpMain extends OpMode{
         this.wheelPart = new WheelPart(hardwareMap);
         this.linearArmPart = new LinearArmPart(hardwareMap);
         this.linearBasketPart = new LinearBasketPart(hardwareMap);
+        this.basketPart = new BasketPart(hardwareMap);
     }
 
     boolean last_left_bumper = false;
-    boolean last_right_bumper = false;
     boolean last_circle = false;
     boolean last_triangle = false;
+    boolean last_square = false;
 
     public void start(){
 
@@ -67,12 +70,12 @@ public class TeleOpMain extends OpMode{
 
 
 
-        // 집게손 움직임
+        // 집게손 + 손목 움직임
 
         if(gamepad1.left_bumper){
             // 닫힘 <--> 열림
             if(!last_left_bumper){
-                this.armPart.move_hand();
+                this.armPart.move_together();
             }
             last_left_bumper = true;
         }
@@ -80,17 +83,6 @@ public class TeleOpMain extends OpMode{
             last_left_bumper = false;
         }
 
-
-        // 손목 움직임
-        if(gamepad1.right_bumper) {
-            if(!last_right_bumper){
-                this.armPart.move_arm();
-            }
-            last_right_bumper = true;
-        }
-        else{
-            last_right_bumper=false;
-        }
 
         // 수평 리니어 움직임 - 불연속적
         if(gamepad1.triangle) {
@@ -108,15 +100,6 @@ public class TeleOpMain extends OpMode{
         }
 
 
-        // 수평 리니어 움직임 - 연속적
-        // if(gamepad1.right_stick_y > 0){
-        //     this.linearArmPart.move(LinearArmPart.Direction.FW);
-        // }
-        // else if(gamepad1.right_stick_y < 0){
-        //     this.linearArmPart.move(LinearArmPart.Direction.BW);
-        // }
-
-
 
 
         // 수직 리니어 움직임
@@ -132,8 +115,26 @@ public class TeleOpMain extends OpMode{
 
         this.linearBasketPart.move();
 
+        telemetry.addData("Basket To Expand", this.linearBasketPart.to_expand);
         telemetry.addData("Current Pos", this.linearBasketPart.dcLinear.getCurrentPosition());
         telemetry.addLine();
+
+
+
+
+        // 바구니 움직임
+        if(gamepad1.square){
+            if(!last_square){
+                this.basketPart.move();
+                if(this.armPart.arm.raised){
+                    this.armPart.arm.move();
+                }
+            }
+            last_square = true;
+        }
+        else{
+            last_square = false;
+        }
 
     }
 

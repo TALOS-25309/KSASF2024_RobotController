@@ -18,8 +18,8 @@ public class LinearBasketPart {
 
 
     public enum Direction {
-        UP(-1400),
-        DOWN(-100),
+        UP(-1700),
+        DOWN(-50),
         ;
 
         private final int label;
@@ -35,7 +35,8 @@ public class LinearBasketPart {
 
         if(this.to_expand){
             if(this.dcLinear.getCurrentPosition() > Direction.UP.label()){
-                this.dcLinear.setPower(-0.5);
+                // this.dcLinear.setPower(-0.01);
+                this.dcLinear.setPower(-0.4);
             }
             else{
                 this.dcLinear.setPower(0);
@@ -44,7 +45,8 @@ public class LinearBasketPart {
 
         else{
             if(this.dcLinear.getCurrentPosition() < Direction.DOWN.label()){
-                this.dcLinear.setPower(0.5);
+                // this.dcLinear.setPower(0.01);
+                this.dcLinear.setPower(0.4);
             }
             else{
                 this.dcLinear.setPower(0);
