@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class ArmPart {
     private Servo servoHand, servoArm;
-    private Arm arm;
-    private Hand hand;
+    public Arm arm;
+    public Hand hand;
 
     public ArmPart(HardwareMap hardwareMap){
         servoHand = hardwareMap.get(Servo.class, "servoHand");
@@ -17,59 +17,49 @@ public class ArmPart {
 
     // 집게손
     public class Hand{
-        private boolean opened = false;
+        private boolean opened = true;
 
-        public void open(){
-            servoHand.setPosition(0.6);
-            this.opened = true;
-        }
-
-        public void close(){
-            servoHand.setPosition(0.1);
-            this.opened = false;
+        public void move(){
+            if(this.opened){
+                servoHand.setPosition(0.35);
+                this.opened = false;
+            }else{
+                servoHand.setPosition(0.6);
+                this.opened = true;
+            }
         }
 
     }
 
     // 손목
     public class Arm{
-        private boolean raised = false;
+        public boolean raised = false;
 
-        public void init(){
-            lower();
-        }
-
-
-        public void raise(){
-            servoArm.setPosition(0.1);
-            this.raised = true;
-        }
-
-        public void lower(){
-            servoArm.setPosition(0.6);
-            this.raised = false;
+        public void move(){
+            if(this.raised){
+                servoArm.setPosition(0);
+                this.raised = false;
+            }else{
+                servoArm.setPosition(1);
+                this.raised = true;
+            }
         }
     }
 
 
+    // 함께 움직임
+    public void move_together(){
 
-
-
-    public void move_hand(){
-        if(hand.opened){
-            hand.close();
+        try {
+            this.hand.move();
+            Thread.sleep(500);
+            this.arm.move();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        else{
-            hand.open();
-        }
+
     }
 
-    public void move_arm(){
-        if(arm.raised){
-            arm.lower();
-        }
-        else{
-            arm.raise();
-        }
-    }
+
+
 }

@@ -38,7 +38,7 @@ public class LinearArmPart {
             this.expanded = true;
         }
         else{
-            this.final_pos=0.1;
+            this.final_pos=0.09;
             this.expanded = false;
         }
         this.servoLinearL.setPosition(final_pos+0.275);
