@@ -29,9 +29,7 @@ public class TeleOpMain extends OpMode{
         this.basketPart = new BasketPart(hardwareMap);
     }
 
-    boolean last_left_bumper = false;
     boolean last_circle = false;
-    boolean last_triangle = false;
     boolean last_square = false;
 
     public void start(){
@@ -56,11 +54,11 @@ public class TeleOpMain extends OpMode{
             // 오른쪽 이동
             this.wheelPart.move(WheelPart.Direction.MOVE_R);
         }
-        else if(gamepad1.left_stick_x < 0){
+        else if(gamepad1.left_bumper){
             // 왼쪽 회전
             this.wheelPart.move(WheelPart.Direction.ROTATE_L);
         }
-        else if(gamepad1.left_stick_x > 0){
+        else if(gamepad1.right_bumper){
             // 오른쪽 회전
             this.wheelPart.move(WheelPart.Direction.ROTATE_R);
         }
@@ -70,42 +68,43 @@ public class TeleOpMain extends OpMode{
 
 
 
-        // 집게손 + 손목 움직임
-
-        if(gamepad1.left_bumper){
-            // 닫힘 <--> 열림
-            if(!last_left_bumper){
-                this.armPart.move_together();
-            }
-            last_left_bumper = true;
-        }
-        else{
-            last_left_bumper = false;
-        }
-
-
-        // 수평 리니어 움직임 - 불연속적
-        if(gamepad1.triangle) {
-            if(!last_triangle){
+        // 수평 리니어 + 집게
+        if(gamepad1.square){
+            if(!last_square){
                 if(this.linearArmPart.expanded){
                     this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
-                }else{
-                    this.linearArmPart.set_pos(LinearArmPart.Direction.FW);
+                    Thread.sleep(500);
+                    this.armPart.hand.close();
+                    Thread.sleep(500);
+                    this.armPart.arm.raise();
+                }
+                else{
+                    linearArmPart.set_pos(LinearArmPart.Direction.FW);
+                    Thread.sleep(500);
+                    this.armPart.hand.open();
+                    Thread.sleep(500);
+                    this.armPart.arm.lower();
                 }
             }
-            last_triangle = true;
+            last_square = true;
         }
         else{
-            last_triangle = false;
+            last_square = false;
         }
 
 
 
 
-        // 수직 리니어 움직임
+        // 수직 리니어 + 바구니
         if(gamepad1.circle) {
             if(!last_circle){
                 this.linearBasketPart.to_expand = !this.linearBasketPart.to_expand;
+                this.basketPart.move();
+                if(this.armPart.arm.raised){
+                    this.armPart.hand.open();
+                    this.armPart.arm.lower();
+                }
+
             }
             last_circle = true;
         }
@@ -114,27 +113,6 @@ public class TeleOpMain extends OpMode{
         }
 
         this.linearBasketPart.move();
-
-        telemetry.addData("Basket To Expand", this.linearBasketPart.to_expand);
-        telemetry.addData("Current Pos", this.linearBasketPart.dcLinear.getCurrentPosition());
-        telemetry.addLine();
-
-
-
-
-        // 바구니 움직임
-        if(gamepad1.square){
-            if(!last_square){
-                this.basketPart.move();
-                if(this.armPart.arm.raised){
-                    this.armPart.arm.move();
-                }
-            }
-            last_square = true;
-        }
-        else{
-            last_square = false;
-        }
 
     }
 

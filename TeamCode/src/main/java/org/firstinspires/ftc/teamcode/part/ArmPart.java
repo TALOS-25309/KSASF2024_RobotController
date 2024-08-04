@@ -29,6 +29,16 @@ public class ArmPart {
             }
         }
 
+        public void open(){
+            servoHand.setPosition(0.6);
+            this.opened = true;
+        }
+
+        public void close(){
+            servoHand.setPosition(0.35);
+            this.opened = false;
+        }
+
     }
 
     // 손목
@@ -44,20 +54,16 @@ public class ArmPart {
                 this.raised = true;
             }
         }
-    }
 
-
-    // 함께 움직임
-    public void move_together(){
-
-        try {
-            this.hand.move();
-            Thread.sleep(500);
-            this.arm.move();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        public void raise(){
+            servoArm.setPosition(1);
+            this.raised = true;
         }
 
+        public void lower(){
+            servoArm.setPosition(0);
+            this.raised = false;
+        }
     }
 
 

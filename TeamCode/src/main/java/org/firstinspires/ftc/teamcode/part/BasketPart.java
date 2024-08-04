@@ -18,8 +18,17 @@ public class BasketPart {
             this.moved = true;
         }
         else{
-            servoBasket.setPosition(0.65);
-            this.moved = false;
+            try {
+                int total_time = 700;
+                int resolution = 700;
+                for (int i = 0; i < resolution; i++) {
+                    servoBasket.setPosition(0.65 / (double)resolution * (double)i);
+                    Thread.sleep(total_time / resolution);
+                }
+                this.moved = false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }
