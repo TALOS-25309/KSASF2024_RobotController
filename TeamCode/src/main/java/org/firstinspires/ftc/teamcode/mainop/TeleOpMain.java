@@ -73,32 +73,16 @@ public class TeleOpMain extends OpMode{
             if(!last_square){
                 if(this.linearArmPart.expanded){
                     this.armPart.hand.close();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    Thread.sleep(500);
                     this.armPart.arm.raise();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    Thread.sleep(500);
                     this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
                 }
                 else{
                     this.armPart.hand.open();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    Thread.sleep(500);
                     this.armPart.arm.lower();
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e){
-                        e.printStackTrace();
-                    }
+                    Thread.sleep(500);
                     linearArmPart.set_pos(LinearArmPart.Direction.FW);
                 }
             }
@@ -118,7 +102,6 @@ public class TeleOpMain extends OpMode{
             if(!last_circle){
                 this.linearBasketPart.to_expand = !this.linearBasketPart.to_expand;
                 this.basketPart.move();
-                this.basketPart.update();
                 if(this.armPart.arm.raised){
                     this.armPart.hand.open();
                     this.armPart.arm.lower();
@@ -132,6 +115,7 @@ public class TeleOpMain extends OpMode{
         }
 
         this.linearBasketPart.move();
+        this.basketPart.update();
 
 
     }

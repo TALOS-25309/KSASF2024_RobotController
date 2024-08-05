@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.part;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.part.LinearArmPart;
 
 public class ArmPart {
     private Servo servoHand, servoArm;
@@ -64,6 +65,13 @@ public class ArmPart {
             servoArm.setPosition(0);
             this.raised = false;
         }
+    }
+
+    public void update(){
+        this.hand.close();
+        this.arm.raise();
+
+
     }
 
 

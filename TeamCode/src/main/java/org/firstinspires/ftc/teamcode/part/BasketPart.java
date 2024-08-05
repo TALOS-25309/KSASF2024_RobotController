@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class BasketPart {
     private Servo servoBasket;
     private boolean moved = false;
-    private int resolution = 400;
+    private int resolution = 350;
     private int counter = 0;
     public boolean moving_down = false;
     private Telemetry telemetry;
@@ -32,12 +32,7 @@ public class BasketPart {
     }
 
     public void update(){
-        telemetry.addData("moved", this.moved);
-        telemetry.addData("moving down",this.moving_down);
-        telemetry.addLine();
-
         if(this.moving_down){
-            telemetry.addData("counter",this.counter);
             servoBasket.setPosition(0.65 / (double)this.resolution * (double)this.counter);
             if(this.counter == this.resolution) {
                 this.counter = 0;
