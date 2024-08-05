@@ -23,6 +23,8 @@ public class BasketPart {
         if(!this.moved){
             servoBasket.setPosition(0);
             this.moved = true;
+            this.counter = 0;
+            this.moving_down = false;
         }
         else{
             this.moved = false;

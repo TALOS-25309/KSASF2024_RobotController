@@ -10,6 +10,10 @@ import org.firstinspires.ftc.teamcode.part.LinearBasketPart;
 import org.firstinspires.ftc.teamcode.part.WheelPart;
 import org.firstinspires.ftc.teamcode.part.BasketPart;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 @TeleOp(name = "KSASF", group = "")
 public class TeleOpMain extends OpMode{
 
@@ -19,6 +23,8 @@ public class TeleOpMain extends OpMode{
     private LinearArmPart linearArmPart;
     private LinearBasketPart linearBasketPart;
     private BasketPart basketPart;
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 
     public void init(){
@@ -37,7 +43,6 @@ public class TeleOpMain extends OpMode{
     }
 
     public void loop(){
-
         if(gamepad1.dpad_up){
             // 직진
             this.wheelPart.move(WheelPart.Direction.MOVE_FW);
@@ -66,24 +71,36 @@ public class TeleOpMain extends OpMode{
             this.wheelPart.stop();
         }
 
-
-
         // 수평 리니어 + 집게
         if(gamepad1.square){
             if(!last_square){
                 if(this.linearArmPart.expanded){
-                    this.armPart.hand.close();
-                    Thread.sleep(500);
-                    this.armPart.arm.raise();
-                    Thread.sleep(500);
-                    this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
+                    scheduler.schedule(
+                            ()->this.armPart.hand.close(),
+                            0, TimeUnit.MILLISECONDS
+                    );
+                    scheduler.schedule(
+                            ()->this.armPart.arm.raise(),
+                            500, TimeUnit.MILLISECONDS
+                    );
+                    scheduler.schedule(
+                            ()->this.linearArmPart.set_pos(LinearArmPart.Direction.BW),
+                            1000, TimeUnit.MILLISECONDS
+                    );
                 }
-                else{
-                    this.armPart.hand.open();
-                    Thread.sleep(500);
-                    this.armPart.arm.lower();
-                    Thread.sleep(500);
-                    linearArmPart.set_pos(LinearArmPart.Direction.FW);
+                else {
+                    scheduler.schedule(
+                            () -> this.armPart.hand.open(),
+                            0, TimeUnit.MILLISECONDS
+                    );
+                    scheduler.schedule(
+                            () -> this.armPart.arm.lower(),
+                            500, TimeUnit.MILLISECONDS
+                    );
+                    scheduler.schedule(
+                            () -> linearArmPart.set_pos(LinearArmPart.Direction.FW),
+                            1000, TimeUnit.MILLISECONDS
+                    );
                 }
             }
             last_square = true;
@@ -92,21 +109,18 @@ public class TeleOpMain extends OpMode{
             last_square = false;
         }
 
-
-
-
-
-
         // 수직 리니어 + 바구니
         if(gamepad1.circle) {
             if(!last_circle){
                 this.linearBasketPart.to_expand = !this.linearBasketPart.to_expand;
-                this.basketPart.move();
+                scheduler.schedule(
+                        () ->  this.basketPart.move(),
+                        1000, TimeUnit.MILLISECONDS
+                );
                 if(this.armPart.arm.raised){
                     this.armPart.hand.open();
                     this.armPart.arm.lower();
                 }
-
             }
             last_circle = true;
         }
@@ -116,8 +130,10 @@ public class TeleOpMain extends OpMode{
 
         this.linearBasketPart.move();
         this.basketPart.update();
-
-
     }
 
+    public void stop(){
+        this.wheelPart.stop();
+        scheduler.shutdown();
+    }
 }
