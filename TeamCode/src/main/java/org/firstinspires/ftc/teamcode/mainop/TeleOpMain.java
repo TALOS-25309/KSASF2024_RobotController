@@ -26,7 +26,7 @@ public class TeleOpMain extends OpMode{
         this.wheelPart = new WheelPart(hardwareMap);
         this.linearArmPart = new LinearArmPart(hardwareMap);
         this.linearBasketPart = new LinearBasketPart(hardwareMap);
-        this.basketPart = new BasketPart(hardwareMap);
+        this.basketPart = new BasketPart(hardwareMap,telemetry);
     }
 
     boolean last_circle = false;
@@ -72,18 +72,34 @@ public class TeleOpMain extends OpMode{
         if(gamepad1.square){
             if(!last_square){
                 if(this.linearArmPart.expanded){
-                    this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
-                    Thread.sleep(500);
                     this.armPart.hand.close();
-                    Thread.sleep(500);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     this.armPart.arm.raise();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    this.linearArmPart.set_pos(LinearArmPart.Direction.BW);
                 }
                 else{
-                    linearArmPart.set_pos(LinearArmPart.Direction.FW);
-                    Thread.sleep(500);
                     this.armPart.hand.open();
-                    Thread.sleep(500);
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
                     this.armPart.arm.lower();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    linearArmPart.set_pos(LinearArmPart.Direction.FW);
                 }
             }
             last_square = true;
@@ -95,11 +111,14 @@ public class TeleOpMain extends OpMode{
 
 
 
+
+
         // 수직 리니어 + 바구니
         if(gamepad1.circle) {
             if(!last_circle){
                 this.linearBasketPart.to_expand = !this.linearBasketPart.to_expand;
                 this.basketPart.move();
+                this.basketPart.update();
                 if(this.armPart.arm.raised){
                     this.armPart.hand.open();
                     this.armPart.arm.lower();
@@ -113,6 +132,7 @@ public class TeleOpMain extends OpMode{
         }
 
         this.linearBasketPart.move();
+
 
     }
 

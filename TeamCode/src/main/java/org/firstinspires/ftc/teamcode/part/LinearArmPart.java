@@ -34,7 +34,7 @@ public class LinearArmPart {
 
     public void set_pos(Direction direction){
         if(direction == Direction.FW){
-            this.final_pos=0.2;
+            this.final_pos=0.17;
             this.expanded = true;
         }
         else{

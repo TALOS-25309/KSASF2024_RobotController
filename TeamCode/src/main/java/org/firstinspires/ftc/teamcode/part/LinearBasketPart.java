@@ -35,7 +35,6 @@ public class LinearBasketPart {
 
         if(this.to_expand){
             if(this.dcLinear.getCurrentPosition() > Direction.UP.label()){
-                // this.dcLinear.setPower(-0.01);
                 this.dcLinear.setPower(-0.6);
             }
             else{
@@ -45,7 +44,6 @@ public class LinearBasketPart {
 
         else{
             if(this.dcLinear.getCurrentPosition() < Direction.DOWN.label()){
-                // this.dcLinear.setPower(0.01);
                 this.dcLinear.setPower(0.6);
             }
             else{
